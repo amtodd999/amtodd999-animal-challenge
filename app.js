@@ -1,15 +1,15 @@
 const express = require("express");
+const app = express();
 const db = require("./db");
 
-const app = express();
+const controllers = require("./controllers");
 
 app.use(require("./middleware/headers"));
-
-const controllers = require("./controllers");
 
 app.use(express.json());
 
 app.use("/user", controllers.usercontroller);
+app.use("/animal", controllers.animalcontroller);
 
 db.authenticate()
   .then(() => db.sync()) // => {force: true}
