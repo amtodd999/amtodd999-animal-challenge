@@ -1,6 +1,4 @@
 const { UniqueConstraintError } = require("sequelize/lib/errors");
-// const express = require("express");
-// const router = express.Router();
 const router = require("express").Router();
 const { User } = require("../models");
 const bcrypt = require("bcryptjs");
@@ -14,9 +12,12 @@ router.post("/create", async (req,res) => {
         username,
         password
     });
+    let token = jwt.sign({id: User.id}, "i_am_secret", {expiresIn: 60 * 60 * 24});
+
     res.status(201).json({
         message: "User is created",
-        user: newUser
+        user: newUser,
+        sessionToken: token
     });
 } catch (err) {
     if (err instanceof UniqueConstraintError) {
